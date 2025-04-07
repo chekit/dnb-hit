@@ -1,7 +1,10 @@
 let CURRENT_ARTIST;
 let IS_PLAYING_NOW = false;
+
 const PLAY_STATE_IMAGE = document.getElementById('play-state');
 const SCANNED_STATUS = document.getElementById('scanned-message');
+const PLAY_PAUSE_BTN = document.getElementById('toggle_play');
+const SCANNER_BTN = document.getElementById('scanner');
 
 window.onSpotifyWebPlaybackSDKReady = async () => {
   const params = new URLSearchParams(document.location.hash.substring(1));
@@ -17,17 +20,15 @@ window.onSpotifyWebPlaybackSDKReady = async () => {
 
   // Ready
   player.addListener('ready', async ({ device_id }) => {
-    console.log('Ready with Device ID');
+    console.log('Ready with Device ID', device_id);
 
-    const btn = document.getElementById('scanner');
-    btn.addEventListener('click', async (e) => {
+    SCANNER_BTN.addEventListener('click', async (e) => {
       e.preventDefault();
 
       initQRScanner();
     });
 
-    const toggle = document.getElementById('toggle_play');
-    toggle.addEventListener('click', async (e) => {
+    PLAY_PAUSE_BTN.addEventListener('click', async (e) => {
       e.preventDefault();
 
       SCANNED_STATUS.style.display = 'none';
@@ -168,6 +169,8 @@ function initQRScanner() {
     // Handle on success condition with the decoded text or result.
     CURRENT_ARTIST = decodedText;
     SCANNED_STATUS.style.display = 'block';
+    PLAY_PAUSE_BTN.disabled = false;
+
     html5QrcodeScanner.clear();
   }
 }
