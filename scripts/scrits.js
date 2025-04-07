@@ -1,6 +1,7 @@
 let CURRENT_ARTIST;
 let IS_PLAYING_NOW = false;
 const PLAY_STATE_IMAGE = document.getElementById('play-state');
+const SCANNED_STATUS = document.getElementById('scanned-message');
 
 window.onSpotifyWebPlaybackSDKReady = async () => {
   const params = new URLSearchParams(document.location.hash.substring(1));
@@ -28,6 +29,8 @@ window.onSpotifyWebPlaybackSDKReady = async () => {
     const toggle = document.getElementById('toggle_play');
     toggle.addEventListener('click', async (e) => {
       e.preventDefault();
+
+      SCANNED_STATUS.style.display = 'none';
 
       if (CURRENT_ARTIST && !IS_PLAYING_NOW) {
         const [top] = await getArtistTopTracks(CURRENT_ARTIST, token);
@@ -164,6 +167,7 @@ function initQRScanner() {
   function onScanSuccess(decodedText, decodedResult) {
     // Handle on success condition with the decoded text or result.
     CURRENT_ARTIST = decodedText;
+    SCANNED_STATUS.style.display = 'block';
     html5QrcodeScanner.clear();
   }
 }

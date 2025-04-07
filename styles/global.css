@@ -27,3 +27,9 @@ html {
   display: none;
   margin: 20px auto;
 }
+
+#scanned-message {
+  display: none;
+  text-align: center;
+  font-size: 1.6em;
+}
