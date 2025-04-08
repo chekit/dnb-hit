@@ -1,6 +1,8 @@
-let CURRENT_ARTIST;
+// Globals
+let CURRENT_SONG;
 let IS_PLAYING_NOW = false;
 
+// UI
 const PLAY_STATE_IMAGE = document.getElementById('play-state');
 const SCANNED_STATUS = document.getElementById('scanned-message');
 const PLAY_PAUSE_BTN = document.getElementById('toggle_play');
@@ -33,14 +35,12 @@ window.onSpotifyWebPlaybackSDKReady = async () => {
 
       SCANNED_STATUS.style.display = 'none';
 
-      if (CURRENT_ARTIST && !IS_PLAYING_NOW) {
-        const [top] = await getArtistTopTracks(CURRENT_ARTIST, token);
-        await startPlayback(
-          top.album.uri,
-          top.track_number - 1,
-          device_id,
+      if (CURRENT_SONG && !IS_PLAYING_NOW) {
+        const { album_uri, track_number } = await searchTrackById(
+          CURRENT_SONG,
           token
         );
+        await startPlayback(album_uri, track_number, device_id, token);
 
         if (isIOS()) {
           await player.togglePlay();
@@ -100,16 +100,19 @@ function authorizeClient() {
   window.location = url;
 }
 
-async function getArtistTopTracks(artistId, token) {
+async function searchTrackById(trackId, token) {
   const request = await fetch(
-    `https://api.spotify.com/v1/artists/${artistId}/top-tracks`,
+    `https://api.spotify.com/v1/tracks/${trackId}?market=EU`,
     {
       headers: { Authorization: `Bearer ${token}` },
     }
   );
   const data = await request.json();
 
-  return data.tracks;
+  return {
+    album_uri: data.album.uri,
+    track_number: data.track_number - 1,
+  };
 }
 
 async function startPlayback(albumId, trackNumber, device_id, token) {
@@ -165,9 +168,9 @@ function initQRScanner() {
   });
   html5QrcodeScanner.render(onScanSuccess);
 
-  function onScanSuccess(decodedText, decodedResult) {
-    // Handle on success condition with the decoded text or result.
-    CURRENT_ARTIST = decodedText;
+  function onScanSuccess(decodedText) {
+    CURRENT_SONG = decodedText;
+
     SCANNED_STATUS.style.display = 'block';
     PLAY_PAUSE_BTN.disabled = false;
 
@@ -194,6 +197,6 @@ async function init() {
   }
 }
 
-(async (global) => {
+(async () => {
   await init();
-})(window);
+})();
