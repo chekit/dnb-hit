@@ -210,12 +210,10 @@ async function init() {
     if (!location.hash.substring(1)) {
       return authorizeClient(redirect_uri);
     } else {
-      setTimeout(() => {
-        const access_token = new URLSearchParams(
-          location.hash.substring(1)
-        ).get('access_token');
-        window.history.replaceState({ access_token }, '', redirect_uri);
-      }, 300);
+      const access_token = new URLSearchParams(location.hash.substring(1)).get(
+        'access_token'
+      );
+      window.history.replaceState({ access_token }, '', redirect_uri);
     }
   } catch (e) {
     console.error('[APP ERROR]', e);
