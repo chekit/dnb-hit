@@ -14,7 +14,7 @@ window.onSpotifyWebPlaybackSDKReady = async () => {
   const token = params.get('access_token') ?? history.state.access_token;
 
   PLAYER = new Spotify.Player({
-    name: 'Web Playback SDK Quick Start Player',
+    name: 'Web Playback SDK Guess Hit Player',
     getOAuthToken: (cb) => {
       cb(token);
     },
