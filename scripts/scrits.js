@@ -1,5 +1,6 @@
 // Globals
 let CURRENT_SONG;
+let PLAYER;
 let IS_PLAYING_NOW = false;
 
 // UI
@@ -10,9 +11,9 @@ const SCANNER_BTN = document.getElementById('scanner');
 
 window.onSpotifyWebPlaybackSDKReady = async () => {
   const params = new URLSearchParams(document.location.hash.substring(1));
-  const token = params.get('access_token');
+  const token = params.get('access_token') ?? history.state.access_token;
 
-  const player = new Spotify.Player({
+  PLAYER = new Spotify.Player({
     name: 'Web Playback SDK Quick Start Player',
     getOAuthToken: (cb) => {
       cb(token);
@@ -21,7 +22,7 @@ window.onSpotifyWebPlaybackSDKReady = async () => {
   });
 
   // Ready
-  player.addListener('ready', async ({ device_id }) => {
+  PLAYER.addListener('ready', async ({ device_id }) => {
     console.log('Ready with Device ID', device_id);
 
     SCANNER_BTN.addEventListener('click', async (e) => {
@@ -43,34 +44,34 @@ window.onSpotifyWebPlaybackSDKReady = async () => {
         await startPlayback(album_uri, track_number, device_id, token);
 
         if (isIOS()) {
-          await player.togglePlay();
+          await PLAYER.togglePlay();
         }
         togglePlayState();
       } else {
-        await player.togglePlay();
+        await PLAYER.togglePlay();
         togglePlayState();
       }
     });
   });
 
   // Not Ready
-  player.addListener('not_ready', ({ device_id }) => {
+  PLAYER.addListener('not_ready', ({ device_id }) => {
     console.log('Device ID has gone offline', device_id);
   });
 
-  player.addListener('initialization_error', ({ message }) => {
+  PLAYER.addListener('initialization_error', ({ message }) => {
     console.error(message);
   });
 
-  player.addListener('authentication_error', ({ message }) => {
+  PLAYER.addListener('authentication_error', ({ message }) => {
     console.error(message);
   });
 
-  player.addListener('account_error', ({ message }) => {
+  PLAYER.addListener('account_error', ({ message }) => {
     console.error(message);
   });
 
-  player.addListener(
+  PLAYER.addListener(
     'player_state_changed',
     ({ position, duration, track_window: { current_track } }) => {
       console.log('Currently Playing', current_track);
@@ -79,10 +80,10 @@ window.onSpotifyWebPlaybackSDKReady = async () => {
     }
   );
 
-  player.connect();
+  PLAYER.connect();
 };
 
-function authorizeClient() {
+function authorizeClient(redirect_uri) {
   const scope = [
     'streaming',
     'user-read-email',
@@ -90,7 +91,6 @@ function authorizeClient() {
     'user-modify-playback-state',
     'user-read-playback-state',
   ];
-  const redirect_uri = window.location.origin + window.location.pathname;
   const CLIENT_ID = '080aff05f66649f194c9851f0b640de7';
 
   const url = `https://accounts.spotify.com/authorize?response_type=token&client_id=${CLIENT_ID}&scope=${scope.join(
@@ -161,20 +161,36 @@ async function getActiveDevice(token) {
   return active;
 }
 
-function initQRScanner() {
-  const html5QrcodeScanner = new Html5QrcodeScanner('reader', {
-    fps: 10,
-    qrbox: 250,
-  });
-  html5QrcodeScanner.render(onScanSuccess);
+async function initQRScanner() {
+  const devices = await Html5Qrcode.getCameras();
+  const [backCamera] = devices.filter((d) =>
+    d.label.toLowerCase().match(/back/gim)
+  );
+  const { id: cameraId } = backCamera ?? devices[0];
 
-  function onScanSuccess(decodedText) {
+  const html5QrCode = new Html5Qrcode('reader');
+
+  await html5QrCode.start(
+    cameraId,
+    {
+      fps: 10,
+      qrbox: 250,
+    },
+    onScanSuccess
+  );
+
+  async function onScanSuccess(decodedText) {
+    await html5QrCode.stop();
     CURRENT_SONG = decodedText;
 
     SCANNED_STATUS.style.display = 'block';
     PLAY_PAUSE_BTN.disabled = false;
 
-    html5QrcodeScanner.clear();
+    if (IS_PLAYING_NOW) {
+      await PLAYER.togglePlay();
+      togglePlayState();
+    }
+    html5QrCode.clear();
   }
 }
 
@@ -189,8 +205,15 @@ function isIOS() {
 
 async function init() {
   try {
+    const redirect_uri = window.location.origin + window.location.pathname;
+
     if (!location.hash.substring(1)) {
-      return authorizeClient();
+      return authorizeClient(redirect_uri);
+    } else {
+      const access_token = new URLSearchParams(location.hash.substring(1)).get(
+        'access_token'
+      );
+      window.history.replaceState({ access_token }, '', redirect_uri);
     }
   } catch (e) {
     console.error('[APP ERROR]', e);
