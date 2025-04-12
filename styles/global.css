@@ -2,12 +2,35 @@ html {
   font: 0.625em/1.3em Arial, sans-serif;
 }
 
-#scanner {
+main {
+  margin: 0 auto;
+  max-width: 960px;
+
+  h1 {
+    margin-block-end: 1.3em;
+    line-height: 1.3em;
+    text-align: center;
+  }
+}
+
+#reader {
+  width: 100%;
+  overflow: hidden;
+}
+
+#scan_qr {
   display: block;
   margin: 0 auto;
-  width: 150px;
-  height: 25px;
+  width: 60px;
+  height: 45px;
+  border: 1px solid #ccc;
   border-radius: 7px;
+  font-size: 2.4em;
+  line-height: 1;
+
+  & ~ #toggle_play {
+    margin-top: 20px;
+  }
 }
 
 #toggle_play {
@@ -16,10 +39,11 @@ html {
   width: 100px;
   height: 100px;
   border-radius: 50%;
-}
-
-#scanner + #toggle_play {
-  margin-top: 20px;
+  border: 1px solid #eee;
+  color: #f3f3f3;
+  font-weight: 800;
+  font-size: 1.5em;
+  background-color: #24bc60;
 }
 
 #play-state {

@@ -10,14 +10,16 @@
     <script src="scripts/scrits.js" defer></script>
   </head>
   <body>
-    <h1>Detect a hit year</h1>
-    <p id="scanned-message">Ready to guess? Click Play/Pause</p>
-    <img
-      id="play-state"
-      src="assets/a55a685b8375807667122027d72de120.gif"
-      alt="play-state" />
-    <button id="scanner">Scan</button>
-    <button id="toggle_play" disabled>Play/Pause</button>
-    <div style="width: 100%; overflow: hidden" id="reader"></div>
+    <main>
+      <h1>👾 Detect a track year 👾</h1>
+      <img
+        id="play-state"
+        src="assets/a55a685b8375807667122027d72de120.gif"
+        alt="play-state" />
+      <button id="scan_qr">🔎</button>
+      <p id="scanned-message">Ready to guess? Click Play/Pause</p>
+      <button id="toggle_play" style="display: none">Play/Pause</button>
+    </main>
+    <div id="reader"></div>
   </body>
 </html>

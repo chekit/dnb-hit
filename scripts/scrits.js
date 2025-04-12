@@ -7,11 +7,10 @@ let IS_PLAYING_NOW = false;
 const PLAY_STATE_IMAGE = document.getElementById('play-state');
 const SCANNED_STATUS = document.getElementById('scanned-message');
 const PLAY_PAUSE_BTN = document.getElementById('toggle_play');
-const SCANNER_BTN = document.getElementById('scanner');
+const SCANNER_BTN = document.getElementById('scan_qr');
 
 window.onSpotifyWebPlaybackSDKReady = async () => {
-  const params = new URLSearchParams(document.location.hash.substring(1));
-  const token = params.get('access_token') ?? history.state.access_token;
+  const token = getToken();
 
   PLAYER = new Spotify.Player({
     name: 'Web Playback SDK Guess Hit Player',
@@ -41,7 +40,7 @@ window.onSpotifyWebPlaybackSDKReady = async () => {
           CURRENT_SONG,
           token
         );
-        await startPlayback(album_uri, track_number, device_id, token);
+        await startPlayback({ album_uri, track_number, device_id, token });
 
         if (isIOS()) {
           await PLAYER.togglePlay();
@@ -116,7 +115,15 @@ async function searchTrackById(trackId, token) {
   };
 }
 
-async function startPlayback(albumId, trackNumber, device_id, token) {
+/**
+ * Source: https://developer.spotify.com/documentation/web-api/reference/start-a-users-playback
+ */
+async function startPlayback({
+  album_uri: context_uri,
+  track_number: position,
+  device_id,
+  token,
+}) {
   await fetch(
     `https://api.spotify.com/v1/me/player/play?device_id=${device_id}`,
     {
@@ -126,24 +133,11 @@ async function startPlayback(albumId, trackNumber, device_id, token) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        context_uri: albumId,
+        context_uri,
         offset: {
-          position: trackNumber,
+          position,
         },
-        // position_ms: 0,
       }),
-    }
-  );
-}
-
-async function stopPlayback(device_id, token) {
-  await fetch(
-    `https://api.spotify.com/v1/me/player/pause?device_id=${device_id}`,
-    {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     }
   );
 }
@@ -185,7 +179,7 @@ async function initQRScanner() {
     CURRENT_SONG = decodedText;
 
     SCANNED_STATUS.style.display = 'block';
-    PLAY_PAUSE_BTN.disabled = false;
+    PLAY_PAUSE_BTN.style.display = 'block';
 
     if (IS_PLAYING_NOW) {
       await PLAYER.togglePlay();
@@ -204,6 +198,16 @@ function isIOS() {
   return /iPad|iPhone|iPod/.test(navigator.userAgent);
 }
 
+function getToken() {
+  const { access_token } = history.state;
+
+  if (!access_token) {
+    throw new Error('Access Token not defined!');
+  }
+
+  return access_token;
+}
+
 async function init() {
   try {
     if (!location.hash.substring(1)) {
@@ -212,11 +216,7 @@ async function init() {
       const access_token = new URLSearchParams(location.hash.substring(1)).get(
         'access_token'
       );
-      window.history.replaceState(
-        { access_token },
-        '',
-        window.location.pathname
-      );
+      window.history.pushState({ access_token }, '', window.location.pathname);
     }
   } catch (e) {
     console.error('[APP ERROR]', e);
