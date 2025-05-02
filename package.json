@@ -8,9 +8,16 @@
   "main": "index.js",
   "scripts": {
     "start": "browser-sync",
-    "start:https": "browser-sync --https true"
+    "start:https": "browser-sync --https true",
+    "build": "vite build",
+    "start-vite:https": "browser-sync ./dist --https true"
   },
   "dependencies": {
-    "browser-sync": "^3.0.4"
+    "browser-sync": "^3.0.4",
+    "html5-qrcode": "^2.3.8"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "vite": "^6.2.6"
   }
 }

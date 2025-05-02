@@ -141,3 +141,4 @@ dist
 .DS_Store
 package-lock.json
 error.md
+dist
