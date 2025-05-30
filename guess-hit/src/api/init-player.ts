@@ -44,7 +44,6 @@ const initPlayer = function () {
 
           togglePlayState();
         } else {
-          debugger;
           await PLAYER.togglePlay();
           togglePlayState();
         }
