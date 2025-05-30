@@ -1,5 +1,6 @@
 import { appState, togglePlayState } from './app-state';
 import { getToken } from './helpers/get-token';
+import { isIOS } from './helpers/is-ios';
 import { initQRScanner } from './scanner/init-qrscanner';
 import { UI } from './ui';
 import { searchTrackById, startPlayback } from './web-play-sdk';
@@ -41,6 +42,10 @@ const initPlayer = function () {
             token
           );
           await startPlayback({ album_uri, track_number, device_id, token });
+
+          if (isIOS()) {
+            await PLAYER.togglePlay();
+          }
 
           togglePlayState();
         } else {
