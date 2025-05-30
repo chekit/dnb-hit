@@ -7,5 +7,5 @@ export const appState = {
 
 export function togglePlayState() {
   appState.IS_PLAYING_NOW = !appState.IS_PLAYING_NOW;
-  PLAY_STATE_IMAGE.style.display = appState.IS_PLAYING_NOW ? 'block' : 'none';
+  PLAY_STATE_IMAGE!.style.display = appState.IS_PLAYING_NOW ? 'block' : 'none';
 }
