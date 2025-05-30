@@ -21,6 +21,7 @@
     transform: scaleY(0.6);
   }
 }
+
 @keyframes loud {
   25% {
     transform: scaleY(1);
@@ -112,8 +113,34 @@ main {
 }
 
 #reader {
+  position: fixed !important;
+  top: 0;
+  z-index: 10;
   width: 100%;
   overflow: hidden;
+}
+
+#play-state,
+#close-reader {
+  display: none;
+}
+
+#close-reader {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 20;
+  margin: 1em;
+  padding: 0;
+  width: 25px;
+  height: 25px;
+  border: 2px solid #fff;
+  border-radius: 50px;
+  background-color: transparent;
+  color: #fff;
+  font-size: 1.3em;
+  font-weight: 800;
+  text-align: center;
 }
 
 .waveContainer {
@@ -192,7 +219,7 @@ main {
     }
   }
 
-  & ~ .play-pause-button {
+  & ~ .play-pause {
     margin-top: 20px;
   }
 }

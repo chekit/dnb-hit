@@ -1,12 +1,13 @@
 import playPauseIcon from './assets/play-or-pause-icon.svg';
 import qrCodeScanIcon from './assets/qrcode-scan-icon.svg';
+import { init } from './game';
 import './style.css';
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <main>
     <div class="top-block">
       <h1>👾 Detect a track year 👾</h1>
-      <div class="waveContainer">
+      <div id="play-state" class="waveContainer">
         <div class="wave wave1"></div>
         <div class="wave wave2"></div>
         <div class="wave wave3"></div>
@@ -30,4 +31,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     </div>
   </main>
   <div id="reader"></div>
+  <button id="close-reader">X</button>
 `
+
+init();

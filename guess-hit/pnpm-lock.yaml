@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      html5-qrcode:
+        specifier: ^2.3.8
+        version: 2.3.8
     devDependencies:
       typescript:
         specifier: ~5.8.3
@@ -403,6 +407,9 @@ packages:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
+
+  html5-qrcode@2.3.8:
+    resolution: {integrity: sha512-jsr4vafJhwoLVEDW3n1KvPnCCXWaQfRng0/EEYk1vNcQGcG/htAdhJX0be8YyqMoSz7+hZvOZSTAepsabiuhiQ==}
 
   magic-string@0.30.17:
     resolution: {integrity: sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA==}
@@ -804,6 +811,8 @@ snapshots:
 
   fsevents@2.3.3:
     optional: true
+
+  html5-qrcode@2.3.8: {}
 
   magic-string@0.30.17:
     dependencies:
