@@ -9,4 +9,20 @@ const UI = {
   get CLOSE_SCANNER_READER() { return document.getElementById('close-reader') }
 }
 
+export function toggleScannedStatus(displaySetting: 'block' | 'none'): void {
+  UI.SCANNED_STATUS!.style.display = displaySetting;
+}
+
+export function toggleCloseScannerButton(displaySetting: 'block' | 'none'): void {
+  UI.CLOSE_SCANNER_READER!.style.display = displaySetting;
+}
+
+export function togglePlayPauseButton(displaySetting: 'block' | 'none'): void {
+  UI.PLAY_PAUSE_BTN!.style.display = displaySetting;
+}
+
+export function togglePlayStateImage(displaySetting: 'flex' | 'none'): void {
+  UI.PLAY_STATE_IMAGE!.style.display = displaySetting;
+}
+
 export { UI };

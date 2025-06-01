@@ -1,8 +1,8 @@
-import { appState, togglePlayState } from './app-state';
-import { getToken } from './helpers/get-token';
-import { isIOS } from './helpers/is-ios';
-import { initQRScanner } from './scanner/init-qrscanner';
-import { UI } from './ui';
+import { appState, togglePlayState } from '../app-state';
+import { getToken } from '../helpers/get-token';
+import { isIOS } from '../helpers/is-ios';
+import { initQRScanner } from '../scanner/init-qrscanner';
+import { UI, toggleScannedStatus } from '../ui';
 import { searchTrackById, startPlayback } from './web-play-sdk';
 
 let PLAYER: { addListener: (...args: any) => void; togglePlay: VoidFunction; connect: VoidFunction };
@@ -34,7 +34,7 @@ const initPlayer = function () {
       UI.PLAY_PAUSE_BTN!.addEventListener('click', async (e) => {
         e.preventDefault();
 
-        UI.SCANNED_STATUS!.style.display = 'none';
+        toggleScannedStatus('none')
 
         if (appState.CURRENT_SONG && !appState.IS_PLAYING_NOW) {
           const { album_uri, track_number } = await searchTrackById(
@@ -85,4 +85,5 @@ const initPlayer = function () {
   };
 }
 
-export { initPlayer, PLAYER };
+export { PLAYER, initPlayer };
+

@@ -1,7 +1,7 @@
 import { Html5Qrcode } from 'html5-qrcode';
 import { appState, togglePlayState } from '../app-state';
-import { PLAYER } from '../init-player';
-import { UI } from '../ui';
+import { PLAYER } from '../spotify/init-player';
+import { UI, toggleCloseScannerButton, togglePlayPauseButton, toggleScannedStatus } from '../ui';
 
 export async function initQRScanner() {
   const devices = await Html5Qrcode.getCameras();
@@ -26,12 +26,12 @@ export async function initQRScanner() {
 
   async function onScanSuccess(decodedText: string) {
     await html5QrCode.stop();
-    UI.CLOSE_SCANNER_READER!.style.display = 'none';
+    toggleCloseScannerButton('none')
 
     appState.CURRENT_SONG = decodedText;
 
-    UI.SCANNED_STATUS!.style.display = 'block';
-    UI.PLAY_PAUSE_BTN!.style.display = 'block';
+    toggleScannedStatus('block')
+    togglePlayPauseButton('block')
 
     if (appState.IS_PLAYING_NOW) {
       await PLAYER.togglePlay();
@@ -43,6 +43,6 @@ export async function initQRScanner() {
 
   UI.CLOSE_SCANNER_READER?.addEventListener('click', async () => {
     await html5QrCode.stop();
-    UI.CLOSE_SCANNER_READER!.style.display = 'none';
+    toggleCloseScannerButton('none')
   });
 }
