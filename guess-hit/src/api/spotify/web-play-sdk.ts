@@ -1,3 +1,6 @@
+import type { Device } from './models/device';
+import type { SearchTrack } from './models/search-track';
+
 export async function searchTrackById(trackId: string, token: string) {
   const request = await fetch(
     `https://api.spotify.com/v1/tracks/${trackId}?market=EU`,
@@ -5,11 +8,11 @@ export async function searchTrackById(trackId: string, token: string) {
       headers: { Authorization: `Bearer ${token}` },
     }
   );
-  const data = await request.json();
+  const { album: { uri: album_uri }, track_number }: SearchTrack = await request.json();
 
   return {
-    album_uri: data.album.uri,
-    track_number: data.track_number - 1,
+    album_uri,
+    track_number: track_number - 1,
   };
 }
 
@@ -49,7 +52,8 @@ export async function getActiveDevice(token: string) {
       Authorization: `Bearer ${token}`,
     },
   });
-  const data = await response.json();
+  const data: { devices: Device[] } = await response.json();
   const [active] = data.devices.filter((d: any) => d.is_active);
+
   return active;
 }
