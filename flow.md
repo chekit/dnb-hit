@@ -9,3 +9,7 @@
 - generate qrs for every track id
   - https://goqr.me/api/
   - https://www.qr-code-generator.com/qr-code-api/
+
+## Migrate to TS
+
+- https://github.com/spotify/spotify-web-api-ts-sdk
