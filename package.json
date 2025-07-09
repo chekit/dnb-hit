@@ -1,23 +1,20 @@
 {
-  "name": "spotify-hityear",
-  "version": "1.0.0",
-  "description": "",
-  "license": "ISC",
-  "author": "",
-  "type": "commonjs",
-  "main": "index.js",
+  "name": "guess-hit",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "start": "browser-sync",
-    "start:https": "browser-sync --https true",
-    "build": "vite build",
-    "start-vite:https": "browser-sync ./dist --https true"
-  },
-  "dependencies": {
-    "browser-sync": "^3.0.4",
-    "html5-qrcode": "^2.3.8"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
   "devDependencies": {
-    "typescript": "^5.8.3",
-    "vite": "^6.2.6"
+    "prettier": "3.6.2",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5",
+    "vite-svg-loader": "^5.1.0"
+  },
+  "dependencies": {
+    "html5-qrcode": "^2.3.8"
   }
 }

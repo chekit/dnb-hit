@@ -3,24 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="styles/global.css" />
+    <title>Guess DnB Year</title>
     <script src="https://sdk.scdn.co/spotify-player.js" defer></script>
-    <!-- <script src="scripts/html5-qrcode.min.js" defer></script>
-    <script src="scripts/scrits.js" defer></script> -->
-    <script src="src/index.ts" type="module" defer></script>
   </head>
   <body>
-    <main>
-      <h1>👾 Detect a track year 👾</h1>
-      <img
-        id="play-state"
-        src="assets/a55a685b8375807667122027d72de120.gif"
-        alt="play-state" />
-      <button id="scan_qr">🔎</button>
-      <p id="scanned-message">Ready to guess? Click Play/Pause</p>
-      <button id="toggle_play" style="display: none">Play/Pause</button>
-    </main>
-    <div id="reader"></div>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
