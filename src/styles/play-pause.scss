@@ -1,0 +1,48 @@
+.play-pause {
+  .play-pause__button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    outline: 1px solid #fff;
+    outline-offset: 2px;
+    border: 1px solid #eee;
+    color: #f3f3f3;
+    font-weight: 800;
+    font-size: 1.5em;
+    background-color: transparent;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+
+    svg {
+      width: 70px;
+      height: 70px;
+
+      path,
+      line {
+        stroke: #fff;
+      }
+    }
+
+    &:active {
+      border-color: #d2d2d2;
+      box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+
+      svg {
+
+        path,
+        line {
+          stroke: #f3f3f3;
+        }
+      }
+    }
+  }
+
+  .play-pause__info {
+    display: none;
+    text-align: center;
+    font-size: 1.6em;
+  }
+}

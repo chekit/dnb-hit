@@ -1,7 +1,7 @@
-import playPauseIcon from './assets/play-or-pause-icon.svg';
-import qrCodeScanIcon from './assets/qrcode-scan-icon.svg';
-import { init } from './game';
-import './style.css';
+import playPauseIcon from './assets/play-or-pause-icon.svg'
+import qrCodeScanIcon from './assets/qrcode-scan-icon.svg'
+import { init } from './game'
+import './global.scss'
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <main>
@@ -34,4 +34,4 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <button id="close-reader">X</button>
 `
 
-init();
+init()
