@@ -1,11 +1,15 @@
-import { appState, togglePlayState } from '../app-state';
+import { state, togglePlayState } from '../app-state';
 import { getToken } from '../helpers/get-token';
 import { isIOS } from '../helpers/is-ios';
 import { initQRScanner } from '../scanner/init-qrscanner';
 import { UI, toggleScannedStatus } from '../ui';
 import { searchTrackById, startPlayback } from './web-play-sdk';
 
-let PLAYER: { addListener: (...args: any) => void; togglePlay: VoidFunction; connect: VoidFunction };
+let PLAYER: {
+  addListener: (...args: any) => void;
+  togglePlay: VoidFunction;
+  connect: VoidFunction;
+};
 
 const initPlayer = function () {
   // @ts-ignore: Global Spotify window object
@@ -22,51 +26,60 @@ const initPlayer = function () {
     });
 
     // Ready
-    PLAYER.addListener('ready', async ({ device_id }: { device_id: string }) => {
-      console.log('Ready with Device ID', device_id);
+    PLAYER.addListener(
+      'ready',
+      async ({ device_id }: { device_id: string }) => {
+        console.log('Ready with Device ID', device_id);
 
-      UI.SCANNER_BTN!.addEventListener('click', async (e) => {
-        e.preventDefault();
+        UI.SCANNER_BTN!.addEventListener('click', async (e) => {
+          e.preventDefault();
 
-        initQRScanner();
-      });
+          initQRScanner();
+        });
 
-      UI.PLAY_PAUSE_BTN!.addEventListener('click', async (e) => {
-        e.preventDefault();
+        UI.PLAY_PAUSE_BTN!.addEventListener('click', async (e) => {
+          e.preventDefault();
 
-        toggleScannedStatus('none')
+          toggleScannedStatus('none');
 
-        if (appState.CURRENT_SONG && !appState.IS_PLAYING_NOW) {
-          const { album_uri, track_number } = await searchTrackById(
-            appState.CURRENT_SONG,
-            token
-          );
-          await startPlayback({ album_uri, track_number, device_id, token });
+          if (state().CURRENT_SONG && !state().IS_PLAYING_NOW) {
+            const { album_uri, track_number } = await searchTrackById(
+              state().CURRENT_SONG!,
+              token
+            );
+            await startPlayback({ album_uri, track_number, device_id, token });
 
-          if (isIOS()) {
+            if (isIOS()) {
+              await PLAYER.togglePlay();
+            }
+
+            togglePlayState();
+          } else {
             await PLAYER.togglePlay();
+            togglePlayState();
           }
-
-          togglePlayState();
-        } else {
-          await PLAYER.togglePlay();
-          togglePlayState();
-        }
-      });
-    });
+        });
+      }
+    );
 
     // Not Ready
     PLAYER.addListener('not_ready', ({ device_id }: { device_id: string }) => {
       console.log('Device ID has gone offline', device_id);
     });
 
-    PLAYER.addListener('initialization_error', ({ message }: { message: string }) => {
-      console.error(message);
-    });
+    PLAYER.addListener(
+      'initialization_error',
+      ({ message }: { message: string }) => {
+        console.error(message);
+      }
+    );
 
-    PLAYER.addListener('authentication_error', ({ message }: { message: string }) => {
-      console.error(message);
-    });
+    PLAYER.addListener(
+      'authentication_error',
+      ({ message }: { message: string }) => {
+        console.error(message);
+      }
+    );
 
     PLAYER.addListener('account_error', ({ message }: { message: string }) => {
       console.error(message);
@@ -74,7 +87,15 @@ const initPlayer = function () {
 
     PLAYER.addListener(
       'player_state_changed',
-      ({ position, duration, track_window: { current_track } }: { position: number; duration: number; track_window: { current_track: string; }; }) => {
+      ({
+        position,
+        duration,
+        track_window: { current_track },
+      }: {
+        position: number;
+        duration: number;
+        track_window: { current_track: string };
+      }) => {
         console.log('Currently Playing', current_track);
         console.log('Position in Song', position);
         console.log('Duration of Song', duration);
@@ -83,7 +104,6 @@ const initPlayer = function () {
 
     PLAYER.connect();
   };
-}
+};
 
 export { PLAYER, initPlayer };
-
