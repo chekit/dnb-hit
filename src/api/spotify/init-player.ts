@@ -5,11 +5,13 @@ import { initQRScanner } from '../scanner/init-qrscanner';
 import { UI, toggleScannedStatus } from '../ui';
 import { searchTrackById, startPlayback } from './web-play-sdk';
 
-let PLAYER: {
+type SPOTIFY_PLAYER = {
   addListener: (...args: any) => void;
   togglePlay: VoidFunction;
   connect: VoidFunction;
 };
+
+let PLAYER: SPOTIFY_PLAYER;
 
 const initPlayer = function () {
   // @ts-ignore: Global Spotify window object
