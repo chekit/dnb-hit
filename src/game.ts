@@ -1,5 +1,5 @@
 import { authorizeClient } from './api/spotify/authorize-client';
-import { initPlayer } from "./api/spotify/init-player";
+import { initPlayer } from './api/spotify/init-player';
 
 export async function init() {
   try {

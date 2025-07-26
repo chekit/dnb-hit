@@ -8,7 +8,10 @@ export async function searchTrackById(trackId: string, token: string) {
       headers: { Authorization: `Bearer ${token}` },
     }
   );
-  const { album: { uri: album_uri }, track_number }: SearchTrack = await request.json();
+  const {
+    album: { uri: album_uri },
+    track_number,
+  }: SearchTrack = await request.json();
 
   return {
     album_uri,
@@ -24,7 +27,12 @@ export async function startPlayback({
   track_number: position,
   device_id,
   token,
-}: { album_uri: string; track_number: number; device_id: string; token: string; }) {
+}: {
+  album_uri: string;
+  track_number: number;
+  device_id: string;
+  token: string;
+}) {
   await fetch(
     `https://api.spotify.com/v1/me/player/play?device_id=${device_id}`,
     {
