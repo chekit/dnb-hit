@@ -61,7 +61,7 @@ export async function getActiveDevice(token: string) {
     },
   });
   const data: { devices: Device[] } = await response.json();
-  const [active] = data.devices.filter((d: any) => d.is_active);
+  const [active] = data.devices.filter((d: Device) => d.is_active);
 
   return active;
 }
