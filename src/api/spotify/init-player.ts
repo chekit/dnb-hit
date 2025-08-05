@@ -14,11 +14,11 @@ type SPOTIFY_PLAYER = {
 let PLAYER: SPOTIFY_PLAYER;
 
 const initPlayer = function () {
-  // @ts-ignore: Global Spotify window object
+  // @ts-expect-error: Global Spotify window object
   window.onSpotifyWebPlaybackSDKReady = async () => {
     const token = getToken();
 
-    // @ts-ignore: Global Spotify object
+    // @ts-expect-error: Global Spotify object
     PLAYER = new Spotify.Player({
       name: 'Web Playback SDK Guess Hit Player',
       getOAuthToken: (cb: (token: string) => void) => {
