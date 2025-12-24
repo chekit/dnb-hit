@@ -6,6 +6,7 @@ export async function init() {
     if (!location.hash.substring(1)) {
       return authorizeClient();
     } else {
+      console.log(location);
       const access_token = new URLSearchParams(location.hash.substring(1)).get(
         'access_token'
       );
